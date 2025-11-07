@@ -19,7 +19,7 @@
         <jsp.version>4.0.0</jsp.version>
         <jstl.version>1.2</jstl.version>
         <postgresql.version>42.7.7</postgresql.version>
-        <bcrypt.version>0.10.2</bcrypt.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
     </properties>
 
     <dependencies>
@@ -58,9 +58,9 @@
             <version>${postgresql.version}</version>
         </dependency>
         <dependency>
-            <groupId>at.favre.lib</groupId>
-            <artifactId>bcrypt</artifactId>
-            <version>${bcrypt.version}</version>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
         </dependency>
     </dependencies>
 

@@ -1,4 +1,4 @@
-package ru.itis.tutorhub.repositories;
+package ru.itis.tutorhub.repositories.user;
 
 public class UserQueries {
 

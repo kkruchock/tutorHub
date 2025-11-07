@@ -1,4 +1,4 @@
-package ru.itis.tutorhub.repositories;
+package ru.itis.tutorhub.repositories.user;
 
 import ru.itis.tutorhub.models.User;
 import ru.itis.tutorhub.utils.DatabaseConnection;
@@ -7,9 +7,9 @@ import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 
-import static ru.itis.tutorhub.repositories.UserMapper.resultSetToUser;
+import static ru.itis.tutorhub.repositories.user.UserMapper.resultSetToUser;
 
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
     public UserRepositoryImpl() {
         initializeTable();
