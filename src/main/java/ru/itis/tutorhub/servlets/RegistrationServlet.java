@@ -1,16 +1,20 @@
 package ru.itis.tutorhub.servlets;
 
-import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.itis.tutorhub.exceptions.UserAlreadyExistsException;
+import ru.itis.tutorhub.models.Session;
 import ru.itis.tutorhub.models.User;
 import ru.itis.tutorhub.repositories.user.UserRepositoryImpl;
-import ru.itis.tutorhub.services.UserService;
-import ru.itis.tutorhub.services.UserServiceImpl;
+import ru.itis.tutorhub.services.session.SessionService;
+import ru.itis.tutorhub.services.user.UserService;
+import ru.itis.tutorhub.services.user.UserServiceImpl;
+import ru.itis.tutorhub.utils.AuthorizationHelper;
 
 import java.io.IOException;
 
@@ -18,10 +22,13 @@ import java.io.IOException;
 public class RegistrationServlet extends HttpServlet {
 
     private UserService userService;
+    private SessionService sessionService;
 
     @Override
-    public void init() throws ServletException{
-        this.userService = new UserServiceImpl(new UserRepositoryImpl());
+    public void init(){
+        ServletContext context = getServletContext();
+        this.userService = (UserService) context.getAttribute("userService");
+        this.sessionService = (SessionService) context.getAttribute("sessionService");
     }
 
     @Override
@@ -58,8 +65,9 @@ public class RegistrationServlet extends HttpServlet {
         try {
             User user = userService.register(name, telegramUsername, password);
 
-            //todo выдача сессии сразу
-            response.sendRedirect(request.getContextPath() + "/login?success=Registration successful");
+            AuthorizationHelper.createSessionAndCookie(user, sessionService, response);
+
+            response.sendRedirect(request.getContextPath() + "/profile");
 
         } catch (UserAlreadyExistsException e) {
 

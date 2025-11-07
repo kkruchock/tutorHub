@@ -13,13 +13,24 @@
 <body>
 <h2>Вход</h2>
 
-<c:if test="${not empty success}">
-    <div style="color: green;">${success}</div>
+<c:if test="${not empty error}">
+    <div style="color: red;">${error}</div>
 </c:if>
 
 <form action="${pageContext.request.contextPath}/login" method="post">
-    <input type="text" name="telegramUsername" placeholder="@username" required>
-    <input type="password" name="password" placeholder="Пароль" required>
+    <div>
+        <label>
+            Telegram ник:
+            <input type="text" name="telegramUsername" placeholder="@username" required>
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Пароль:
+            <input type="password" name="password" required>
+        </label>
+    </div>
     <button type="submit">Войти</button>
 </form>
 
