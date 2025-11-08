@@ -2,6 +2,7 @@ package ru.itis.tutorhub.models;
 
 import ru.itis.tutorhub.models.enums.ApplicationStatus;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Application {
@@ -14,6 +15,7 @@ public class Application {
     private int fixedPrice; //цена на момент создания, не должна зависеть от изменений в анкете репетитора
     private String message;
     private ApplicationStatus status;
+    private LocalDateTime createdAT;
 
     //для создания
     public Application(
@@ -32,6 +34,7 @@ public class Application {
         this.fixedPrice = fixedPrice;
         this.message = message;
         this.status = ApplicationStatus.PENDING;
+        this.createdAT = LocalDateTime.now();
     }
 
     //для получения с БД
@@ -43,7 +46,8 @@ public class Application {
             UUID goalId,
             int fixedPrice,
             String message,
-            ApplicationStatus status
+            ApplicationStatus status,
+            LocalDateTime createdAt
     ) {
         this.id = id;
         this.tutorProfileId = tutorProfileId;
@@ -53,6 +57,7 @@ public class Application {
         this.fixedPrice = fixedPrice;
         this.message = message;
         this.status = status;
+        this.createdAT = createdAt;
     }
 
     public UUID getId() {
@@ -113,5 +118,13 @@ public class Application {
 
     public void setStatus(ApplicationStatus status) {
         this.status = status;
+    }
+
+    public LocalDateTime getCreatedAT() {
+        return createdAT;
+    }
+
+    public void setCreatedAT(LocalDateTime createdAT) {
+        this.createdAT = createdAT;
     }
 }

@@ -10,11 +10,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.itis.tutorhub.exceptions.UserAlreadyExistsException;
 import ru.itis.tutorhub.models.Session;
 import ru.itis.tutorhub.models.User;
+import ru.itis.tutorhub.models.ValidationResult;
 import ru.itis.tutorhub.repositories.user.UserRepositoryImpl;
 import ru.itis.tutorhub.services.session.SessionService;
 import ru.itis.tutorhub.services.user.UserService;
 import ru.itis.tutorhub.services.user.UserServiceImpl;
 import ru.itis.tutorhub.utils.AuthorizationHelper;
+import ru.itis.tutorhub.utils.ValidationUtils;
 
 import java.io.IOException;
 
@@ -47,13 +49,15 @@ public class RegistrationServlet extends HttpServlet {
         String telegramUsername = request.getParameter("telegramUsername");
         String password = request.getParameter("password");
 
-        //проверяем данные, если нет, регаем заново
-        //todo нормальная валидация + нормальные ошибки
-        if (name == null || name.trim().isEmpty() ||
-                telegramUsername == null || telegramUsername.trim().isEmpty() ||
-                password == null || password.trim().isEmpty()) {
+        ValidationResult validationResult = ValidationUtils.validateUserFields(name, telegramUsername, password);
 
-            request.setAttribute("error", "Все поля обязательны для заполнения");
+        if (!validationResult.isValid()) {
+
+            request.setAttribute("error", validationResult.getFirstError());
+            request.setAttribute("errors", validationResult.getErrors()); // для отображения ошибок у конкретных полей (но думаю не сделаю)
+            request.setAttribute("name", name);
+            request.setAttribute("telegramUsername", telegramUsername);
+
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
             return;
         }

@@ -11,10 +11,12 @@ import ru.itis.tutorhub.exceptions.InvalidPasswordException;
 import ru.itis.tutorhub.exceptions.UserNotFoundException;
 import ru.itis.tutorhub.models.Session;
 import ru.itis.tutorhub.models.User;
+import ru.itis.tutorhub.models.ValidationResult;
 import ru.itis.tutorhub.services.auth.AuthService;
 import ru.itis.tutorhub.services.session.SessionService;
 import ru.itis.tutorhub.services.user.UserService;
 import ru.itis.tutorhub.utils.AuthorizationHelper;
+import ru.itis.tutorhub.utils.ValidationUtils;
 
 import java.io.IOException;
 
@@ -51,6 +53,19 @@ public class LoginServlet extends HttpServlet {
         String telegramUsername = request.getParameter("telegramUsername");
         String password = request.getParameter("password");
 
+        ValidationResult validationResult = ValidationUtils.validateLoginFields(telegramUsername, password);
+
+        if (!validationResult.isValid()) {
+            request.setAttribute("error", validationResult.getFirstError());
+            request.setAttribute("errors", validationResult.getErrors()); // для отображения ошибок у конкретных полей (не факт, что сделаю)
+            request.setAttribute("telegramUsername", telegramUsername);
+            request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+            return;
+        }
+
+        telegramUsername = telegramUsername.trim();
+        password = password.trim();
+
         try {
             User user = userService.login(telegramUsername, password);
 
@@ -67,7 +82,7 @@ public class LoginServlet extends HttpServlet {
         } catch (InvalidPasswordException e) {
 
             request.setAttribute("error", "Неверный пароль");
-            request.setAttribute("telegramUsername", telegramUsername); // Сохраняем username
+            request.setAttribute("telegramUsername", telegramUsername);
             request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
 
         } catch (Exception e) {

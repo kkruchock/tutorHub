@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Профиль - TutorHub</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <h1>👤 Ваш профиль</h1>
