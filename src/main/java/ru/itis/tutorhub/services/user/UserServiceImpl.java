@@ -1,4 +1,4 @@
-package ru.itis.tutorhub.services;
+package ru.itis.tutorhub.services.user;
 
 import ru.itis.tutorhub.exceptions.InvalidPasswordException;
 import ru.itis.tutorhub.exceptions.UserAlreadyExistsException;
@@ -6,6 +6,9 @@ import ru.itis.tutorhub.exceptions.UserNotFoundException;
 import ru.itis.tutorhub.models.User;
 import ru.itis.tutorhub.repositories.user.UserRepository;
 import ru.itis.tutorhub.utils.PasswordHasher;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public class UserServiceImpl implements UserService {
 
@@ -41,5 +44,10 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
     }
 }
